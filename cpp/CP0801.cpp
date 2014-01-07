@@ -1,23 +1,27 @@
-#include <stdio.h>
+#include <iostream>
+#include <iomanip>
 #include <math.h>
+using namespace std;
 
 // 元の関数
 double f(double x);
 // 導関数
 double fd(double x);
 // Euler法
-void euler(double x, double y, int n);  
+void euler(double x, double y, int n, double max);
 
 int main(void)
 {
     double x = 0.0;
     double y = f(x);
+    double max = 4;
 
     for (int n = 4; n <= 128; n *= 2) {
-    	printf("分割数 = %d\n", n);
-		euler(x, y, n);
-	}
-	return 0;
+        cout << "分割数 = ";
+        cout << n << endl;
+        euler(x, y, n, max);
+    }
+    return 0;
 }
 
 // 元の関数
@@ -28,18 +32,22 @@ double f(double x)
 // 導関数
 double fd(double x)
 {
-    return 1 - pow(x,2) / 2 + pow(x,4) / (4 * 3 * 2); 
+    return 1 - pow(x,2) / 2 + pow(x,4) / (4 * 3 * 2);
 }
-
 // Euler法
-void euler(double x, double y, int n)  
+void euler(double x, double y, int n, double max)
 {
-    double h = 1.0 / n;
+    double h = max / n;
 
     for (int i = 1; i <= n; i++) {
-    	y = y + h * fd(x);
+        y = y + h * fd(x);
         x = x + h;
         double z = f(x);
-		printf("%8.5f \t %8.5f \t %8.5f \t %8.5f\n", x, y, z, y - z);
-	}
+
+        // 元の関数と比較
+        cout << setw(8) << fixed << setprecision(5) << x     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << y     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << z     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << y - z << endl;
+    }
 }

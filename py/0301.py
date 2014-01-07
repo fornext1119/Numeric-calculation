@@ -1,0 +1,10 @@
+# coding: Shift_JIS
+
+# ‰€:a, Œö·:a ‚Å ãŒÀ:lim ‚Ì”—ñ‚Ì‘˜a‚ğ•Ô‚·ŠÖ”
+def sn(a, lim):
+    n = int(lim) / a        # €”:n  =  ãŒÀ:lim / Œö·:a
+    l = n * a               # ––€:l  =  €”:n   * Œö·:a
+    return (a + l) * n / 2  # ‘˜a:sn = (‰€:a   + ––€:l) * €”:n / 2
+
+# 3 ‚Ì”{”‚Ì‡Œv
+print sn(3, 999)

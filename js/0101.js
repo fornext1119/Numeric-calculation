@@ -1,0 +1,10 @@
+WScript.Echo(3 + 5)
+WScript.Echo(3 - 5)
+WScript.Echo(3 * 5)
+WScript.Echo(Math.pow(3, 5))
+WScript.Echo(5 / 3)
+WScript.Echo(parseInt(5 / 3))
+WScript.Echo(5 % 3)
+
+WScript.StdOut.Write(3 * 5 + "\n")
+WScript.StdOut.WriteLine(3 * 5)

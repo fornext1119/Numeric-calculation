@@ -3,51 +3,58 @@
 #include <math.h>
 using namespace std;
 
-// 元の関数
-double f(double x);
-// 導関数
-double fd(double x);
-// Heun法
-void heun(double x, double y, int n, double max);
+// 重力加速度
+const double g = 9.8;
+
+// 水平方向の速度
+double fx(double t, double vx)
+{
+    // 水平方向の速度は, 初速のまま   
+    return vx; 
+}
+// 鉛直方向の速度
+double fy(double t, double vy)
+{
+    // 初速から落下速度を引く 
+    return vy - (t * g);
+}
 
 int main(void)
 {
+    // 角度 
+    double degree = 45;
+    double radian = degree * M_PI / 180.0;
+    // 初速 150 km/h -> 秒速に変換
+    double v = 150 * 1000 / 3600; 
+    // 水平方向の速度
+    double vx = v * cos(radian); 
+    // 鉛直方向の速度
+    double vy = v * sin(radian); 
+    // 時間間隔(秒)
+    double dt = 0.01;
+    // 経過秒数
+    double t = 0.0;
+    // 位置
     double x = 0.0;
-    double y = f(x);
-    double max = 4;
+    double y = 0.0;
 
-    for (int n = 4; n <= 128; n *= 2) {
-        cout << "分割数 = ";
-        cout << n << endl;
-        euler(x, y, n, max);
+    // Heun法
+    for (int i = 1; y >= 0.0; i++) 
+    {
+        // 位置
+        x = x + dt * fx(t, vx);
+        y = y + (dt * fy(t, vy) + dt * fy(t + dt, vy)) / 2;
+        // 経過秒数
+        t = i * dt;
+
+        // 経過秒数
+        cout << setw(8) << fixed << setprecision(5) << t      << "\t";
+        // 位置 (Euler法)
+        cout << setw(8) << fixed << setprecision(5) << x      << "\t";
+        cout << setw(8) << fixed << setprecision(5) << y      << "\t";
+        // 位置 (正解)
+        cout << setw(8) << fixed << setprecision(5) << vx * t << "\t";
+        cout << setw(8) << fixed << setprecision(5) << vy * t - (g * t * t) / 2 << endl;
     }
     return 0;
-}
-
-// 元の関数
-double f(double x)
-{
-    return x - pow(x,3) / (3 * 2) + pow(x,5) / (5 * 4 * 3 * 2);
-}
-// 導関数
-double fd(double x)
-{
-    return 1 - pow(x,2) / 2 + pow(x,4) / (4 * 3 * 2);
-}
-// Heun法
-void heun(double x, double y, int n, double max)
-{
-    double h = max / n;
-
-    for (int i = 1; i <= n; i++) {
-        y = y + h * (fd(x) + fd(x + h)) / 2;
-        x = x + h;
-        double z = f(x);
-
-        // 元の関数と比較
-        cout << setw(8) << fixed << setprecision(5) << x     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << z     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y - z << endl;
-    }
 }

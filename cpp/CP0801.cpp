@@ -3,51 +3,46 @@
 #include <math.h>
 using namespace std;
 
-// 元の関数
-double f(double x);
-// 導関数
-double fd(double x);
-// Euler法
-void euler(double x, double y, int n, double max);
-
 int main(void)
 {
-    double x = 0.0;
-    double y = f(x);
-    double max = 4;
+    // 角度 
+    double degree = 45;//70;//45; 
+    double radian = degree * M_PI / 180.0;
 
-    for (int n = 4; n <= 128; n *= 2) {
-        cout << "分割数 = ";
-        cout << n << endl;
-        euler(x, y, n, max);
+    // 初速 150 km/h -> 秒速に変換
+    double v = 150 * 1000 / 3600; 
+    // 水平方向の速度
+    double vx = v * cos(radian); 
+    // 鉛直方向の速度
+    double vy = v * sin(radian); 
+
+    // 重力加速度
+    double g = 9.8;
+
+    // 時間間隔(秒)
+    double dt = 0.01;
+    // 経過秒数
+    double t = 0.0;
+    //位置
+    double x = 0.0;
+    double y = 0.0;
+
+    // Euler法
+    for (int i = 1; y >= 0.0; i++) 
+    {
+        y = y + dt * vy;
+        x = x + dt * vx;
+
+        t = i * dt;
+
+        cout << setw(8) << fixed << setprecision(5) << t     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << x     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << vx*t     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << y     << "\t";
+        cout << setw(8) << fixed << setprecision(5) << vy*t - (g*t*t/2) << endl;
+        
+        // 鉛直方向の速度
+        vy = vy - (dt * g);
     }
     return 0;
-}
-
-// 元の関数
-double f(double x)
-{
-    return x - pow(x,3) / (3 * 2) + pow(x,5) / (5 * 4 * 3 * 2);
-}
-// 導関数
-double fd(double x)
-{
-    return 1 - pow(x,2) / 2 + pow(x,4) / (4 * 3 * 2);
-}
-// Euler法
-void euler(double x, double y, int n, double max)
-{
-    double h = max / n;
-
-    for (int i = 1; i <= n; i++) {
-        y = y + h * fd(x);
-        x = x + h;
-        double z = f(x);
-
-        // 元の関数と比較
-        cout << setw(8) << fixed << setprecision(5) << x     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << z     << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y - z << endl;
-    }
 }

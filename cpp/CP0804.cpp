@@ -43,36 +43,38 @@ int main(void)
     double y = 0.0;
 
     // 速度
-    double vxs = fx(vx, v);
-    double vys = fy(vy, v);
-    v = sqrt(vxs * vxs + vys * vys);
+    double vx1 = fx(vx, v);
+    double vy1 = fy(vy, v);
+    v = sqrt(vx1 * vx1 + vy1 * vy1);
 
     // Heun法
     for (int i = 1; y >= 0.0; i++) 
     {
         // 速度
-        vx = fx(vxs, v);
-        vy = fy(vys, v);
-        v = sqrt(vx * vx + vy * vy);
+        double vx2 = fx(vx1, v);
+        double vy2 = fy(vy1, v);
+        vx = (vx1 + vx2) / 2;
+        vy = (vy1 + vy2) / 2;
 
-        // 位置 (Heun法)
-        x = x + dt * (vxs + vx) / 2; 
-        y = y + dt * (vys + vy) / 2; 
+        // 位置
+        x = x + dt * vx; 
+        y = y + dt * vy; 
 
         // 経過秒数
         t = i * dt;
         cout << setw(8) << fixed << setprecision(5) << t << "\t";
 
         // 速度
-        cout << setw(8) << fixed << setprecision(5) << (vxs + vx) / 2 << "\t";
-        cout << setw(9) << fixed << setprecision(5) << (vys + vy) / 2 << "\t";
+        cout << setw(8) << fixed << setprecision(5) << vx << "\t";
+        cout << setw(9) << fixed << setprecision(5) << vy << "\t";
 
         // 位置
         cout << setw(9) << fixed << setprecision(5) << x << "\t";
         cout << setw(8) << fixed << setprecision(5) << y << endl;
 
-        vxs = vx;
-        vys = vy;
+        v = sqrt(vx2 * vx2 + vy2 * vy2);
+        vx1 = vx2;
+        vy1 = vy2;
     }
     return 0;
 }

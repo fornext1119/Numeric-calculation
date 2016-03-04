@@ -3,58 +3,68 @@
 #include <math.h>
 using namespace std;
 
-// é‡åŠ›åŠ é€Ÿåº¦
-const double g = 9.8;
+// d—Í‰Á‘¬“x
+const double g = -9.8;
+// ‹ó‹C’ïRŒW”
+const double k = -0.01;
+// ŠÔŠÔŠu(•b)
+const double h = 0.01;
 
-// æ°´å¹³æ–¹å‘ã®é€Ÿåº¦
-double fx(double t, double vx)
-{
-    // æ°´å¹³æ–¹å‘ã®é€Ÿåº¦ã¯, åˆé€Ÿã®ã¾ã¾   
-    return vx; 
-}
-// é‰›ç›´æ–¹å‘ã®é€Ÿåº¦
-double fy(double t, double vy)
-{
-    // åˆé€Ÿã‹ã‚‰è½ä¸‹é€Ÿåº¦ã‚’å¼•ã 
-    return vy - (t * g);
-}
+// ‹ó‹C’ïR‚É‚æ‚é…•½•ûŒü‚ÌŒ¸‘¬•ª
+double fx(double vx, double vy);
+// d—Í‚Æ‹ó‹C’ïR‚É‚æ‚é‰”’¼•ûŒü‚ÌŒ¸‘¬•ª
+double fy(double vx, double vy);
 
-int main(void)
+int main()
 {
-    // è§’åº¦ 
+    // Šp“x
     double degree = 45;
     double radian = degree * M_PI / 180.0;
-    // åˆé€Ÿ 150 km/h -> ç§’é€Ÿã«å¤‰æ›
-    double v = 150 * 1000 / 3600; 
-    // æ°´å¹³æ–¹å‘ã®é€Ÿåº¦
-    double vx = v * cos(radian); 
-    // é‰›ç›´æ–¹å‘ã®é€Ÿåº¦
-    double vy = v * sin(radian); 
-    // æ™‚é–“é–“éš”(ç§’)
-    double dt = 0.01;
-    // çµŒéç§’æ•°
+    // ‰‘¬ 250 km/h -> •b‘¬‚É•ÏŠ·
+    double v = 250 * 1000 / 3600;
+    // …•½•ûŒü‚Ì‘¬“x
+    double vx[2]; 
+    vx[0] = v * cos(radian); 
+    // ‰”’¼•ûŒü‚Ì‘¬“x
+    double vy[2]; 
+    vy[0] = v * sin(radian); 
+    // Œo‰ß•b”
     double t = 0.0;
-    // ä½ç½®
+    // ˆÊ’u
     double x = 0.0;
     double y = 0.0;
 
-    // Euleræ³•
-    for (int i = 1; y >= 0.0; i++) 
+    // Euler–@
+    for (int i = 1; y >= 0.0; i++)
     {
-        // ä½ç½®
-        x = x + dt * fx(t, vx);
-        y = y + dt * fy(t, vy);
-        // çµŒéç§’æ•°
-        t = i * dt;
+        // Œo‰ß•b”
+        t = i * h;
+        cout << setw(4) << fixed << setprecision(2) << t << "\t";
 
-        // çµŒéç§’æ•°
-        cout << setw(8) << fixed << setprecision(5) << t      << "\t";
-        // ä½ç½® (Euleræ³•)
-        cout << setw(8) << fixed << setprecision(5) << x      << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y      << "\t";
-        // ä½ç½® (æ­£è§£)
-        cout << setw(8) << fixed << setprecision(5) << vx * t << "\t";
-        cout << setw(8) << fixed << setprecision(5) << vy * t - (g * t * t) / 2 << endl;
+        // ˆÊ’u
+        x += h * vx[0];
+        y += h * vy[0];
+        cout << setw(8) << fixed << setprecision(5) << vx[0] << "\t";
+        cout << setw(9) << fixed << setprecision(5) << vy[0] << "\t";
+        cout << setw(9) << fixed << setprecision(5) <<  x    << "\t";
+        cout << setw(8) << fixed << setprecision(5) <<  y    << endl;
+
+        // ‘¬“x
+        vx[1] = vx[0] + h * fx(vx[0], vy[0]);
+        vy[1] = vy[0] + h * fy(vx[0], vy[0]);
+        vx[0] = vx[1];
+        vy[0] = vy[1];
     }
     return 0;
+}
+
+// ‹ó‹C’ïR‚É‚æ‚é…•½•ûŒü‚ÌŒ¸‘¬•ª
+double fx(double vx, double vy)
+{
+    return k * sqrt(vx * vx + vy * vy) * vx;
+}
+// d—Í‚Æ‹ó‹C’ïR‚É‚æ‚é‰”’¼•ûŒü‚ÌŒ¸‘¬•ª
+double fy(double vx, double vy)
+{
+    return g + (k * sqrt(vx * vx + vy * vy) * vy);
 }

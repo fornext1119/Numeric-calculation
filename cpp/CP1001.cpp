@@ -5,8 +5,10 @@ using namespace std;
 
 const int N = 4;
 
-// ãƒ¤ã‚³ãƒ“ã®åå¾©æ³•
+// ƒ„ƒRƒr‚Ì”½•œ–@
 void jacobi(double a[N][N], double b[N], double c[N]);
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N]);
 
 int main()
 {
@@ -14,18 +16,16 @@ int main()
     double b[N]    = {20,16,8,17};
     double c[N]    = {0,0,0,0};
 
-    // ãƒ¤ã‚³ãƒ“ã®åå¾©æ³•
+    // ƒ„ƒRƒr‚Ì”½•œ–@
     jacobi(a,b,c);
 
-    cout << "è§£" << endl;
-    for (int i = 0; i < N; i++)
-        cout << setw(14) << fixed << setprecision(10) << c[i] << "\t";
-    cout << endl;
-   
+    cout << "X" << endl;
+    disp_vector(c);
+
     return 0;
 }
 
-// ãƒ¤ã‚³ãƒ“ã®åå¾©æ³•
+// ƒ„ƒRƒr‚Ì”½•œ–@
 void jacobi(double a[N][N], double b[N], double x0[N])
 {
     while (true)
@@ -42,13 +42,18 @@ void jacobi(double a[N][N], double b[N], double x0[N])
             x1[i] = (b[i] - x1[i]) / a[i][i];
             if (fabs(x1[i] - x0[i]) > 0.0000000001) finish = false;
         }
-
         for (int i = 0; i < N; i++)
-        {
             x0[i] = x1[i];
-            cout << setw(14) << fixed << setprecision(10) << x0[i] << "\t";
-        }
-        cout << endl;
         if (finish) return;
+
+        disp_vector(x0);
     }
+}
+
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N])
+{
+    for (int i = 0; i < N; i++)
+        cout << setw(14) << fixed << setprecision(10) << row[i] << "\t";
+    cout << endl;
 }

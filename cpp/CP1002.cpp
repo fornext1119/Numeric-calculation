@@ -5,8 +5,10 @@ using namespace std;
 
 const int N = 4;
 
-// ã‚¬ã‚¦ã‚¹ãƒ»ã‚¶ã‚¤ãƒ‡ãƒ«æ³•
+// ƒKƒEƒXEƒUƒCƒfƒ‹–@
 void gauss(double a[N][N], double b[N], double c[N]);
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N]);
 
 int main()
 {
@@ -14,27 +16,24 @@ int main()
     double b[N]    = {20,16,8,17};
     double c[N]    = {0,0,0,0};
 
-	// ã‚¬ã‚¦ã‚¹ãƒ»ã‚¶ã‚¤ãƒ‡ãƒ«æ³•
+	// ƒKƒEƒXEƒUƒCƒfƒ‹–@
     gauss(a,b,c);
 
-    cout << "è§£" << endl;
-    for (int i = 0; i < N; i++)
-        cout << setw(14) << fixed << setprecision(10) << c[i] << "\t";
-    cout << endl;
-   
+    cout << "X" << endl;
+    disp_vector(c);
+
     return 0;
 }
 
-// ã‚¬ã‚¦ã‚¹ãƒ»ã‚¶ã‚¤ãƒ‡ãƒ«æ³•
+// ƒKƒEƒXEƒUƒCƒfƒ‹–@
 void gauss(double a[N][N], double b[N], double x0[N])
 {
     while (true)
     {
-        double x1;
         bool finish = true;
         for (int i = 0; i < N; i++)
         {
-            x1 = 0;
+            double x1 = 0;
             for (int j = 0; j < N; j++)
                 if (j != i)
                     x1 += a[i][j] * x0[j];
@@ -43,10 +42,16 @@ void gauss(double a[N][N], double b[N], double x0[N])
             if (fabs(x1 - x0[i]) > 0.0000000001) finish = false;
             x0[i] = x1;
         }
-
-        for (int i = 0; i < N; i++)
-            cout << setw(14) << fixed << setprecision(10) << x0[i] << "\t";
-        cout << endl;
         if (finish) return;
+
+	    disp_vector(x0);
     }
+}
+
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N])
+{
+    for (int i = 0; i < N; i++)
+        cout << setw(14) << fixed << setprecision(10) << row[i] << "\t";
+    cout << endl;
 }

@@ -3,78 +3,93 @@
 #include <math.h>
 using namespace std;
 
-// ÈáçÂäõÂä†ÈÄüÂ∫¶
-const double g = 9.8;
-// Á©∫Ê∞óÊäµÊäó
-const double k = 0.01;
-// ÊôÇÈñìÈñìÈöî(Áßí)
-const double dt = 0.1;
+// èdóÕâ¡ë¨ìx
+const double g = -9.8;
+// ãÛãCíÔçRåWêî
+const double k = -0.01;
+// éûä‘ä‘äu(ïb)
+const double h = 0.01;
 
-// Ê∞¥Âπ≥ÊñπÂêë„ÅÆÈÄüÂ∫¶
-double fx(double vx, double v)
-{
-    // ÂàùÈÄü„Åã„ÇâÁ©∫Ê∞óÊäµÊäó„Å´„Çà„ÇãÊ∏õÈÄüÂàÜ„ÇíÂºï„Åè
-    double ax = k * v * vx;
-    return vx - ax * dt; 
-}
-// ÈâõÁõ¥ÊñπÂêë„ÅÆÈÄüÂ∫¶
-double fy(double vy, double v)
-{
-    // ÂàùÈÄü„Åã„ÇâËêΩ‰∏ãÈÄüÂ∫¶„Å®Á©∫Ê∞óÊäµÊäó„Å´„Çà„ÇãÊ∏õÈÄüÂàÜ„ÇíÂºï„Åè
-    double ay = k * v * vy;
-    return vy - (g + ay) * dt;
-}
+// ãÛãCíÔçRÇ…ÇÊÇÈêÖïΩï˚å¸ÇÃå∏ë¨ï™
+double fx(double vx, double vy);
+// èdóÕÇ∆ãÛãCíÔçRÇ…ÇÊÇÈâîíºï˚å¸ÇÃå∏ë¨ï™
+double fy(double vx, double vy);
 
-int main(void)
+int main()
 {
-    // ËßíÂ∫¶ 
-    double degree = 30;
+    // äpìx 
+    double degree = 45;
     double radian = degree * M_PI / 180.0;
-    // ÂàùÈÄü 150 km/h -> ÁßíÈÄü„Å´Â§âÊèõ
-    double v = 150 * 1000 / 3600; 
-    // Ê∞¥Âπ≥ÊñπÂêë„ÅÆÈÄüÂ∫¶
-    double vx = v * cos(radian); 
-    // ÈâõÁõ¥ÊñπÂêë„ÅÆÈÄüÂ∫¶
-    double vy = v * sin(radian); 
-    // ÁµåÈÅéÁßíÊï∞
+    // èâë¨ 250 km/h -> ïbë¨Ç…ïœä∑
+    double v = 250 * 1000 / 3600; 
+    // êÖïΩï˚å¸ÇÃë¨ìx
+    double vx[5]; 
+    vx[0] = v * cos(radian); 
+    // âîíºï˚å¸ÇÃë¨ìx
+    double vy[5]; 
+    vy[0] = v * sin(radian); 
+    // åoâﬂïbêî
     double t = 0.0;
-    // ‰ΩçÁΩÆ
-    double x = 0.0;
-    double y = 0.0;
+    // à íu
+    double x[5];
+    x[0] = 0.0;
+    double y[5];
+    y[0] = 0.0;
 
-    // ÈÄüÂ∫¶
-    double vx1 = fx(vx, v);
-    double vy1 = fy(vy, v);
-    v = sqrt(vx1 * vx1 + vy1 * vy1);
-
-    // HeunÊ≥ï
-    for (int i = 1; y >= 0.0; i++) 
+    // Runge-Kuttañ@
+    for (int i = 1; y[0] >= 0.0; i++) 
     {
-        // ÈÄüÂ∫¶
-        double vx2 = fx(vx1, v);
-        double vy2 = fy(vy1, v);
-        vx = (vx1 + vx2) / 2;
-        vy = (vy1 + vy2) / 2;
+        // åoâﬂïbêî
+        t = i * h;
+        cout << setw(4) << fixed << setprecision(2) << t << "\t";
 
-        // ‰ΩçÁΩÆ
-        x = x + dt * vx; 
-        y = y + dt * vy; 
+        // à íuÅEë¨ìx
+        x[1]  = h *    vx[0];
+        y[1]  = h *    vy[0];
+        vx[1] = h * fx(vx[0], vy[0]);
+        vy[1] = h * fy(vx[0], vy[0]);
 
-        // ÁµåÈÅéÁßíÊï∞
-        t = i * dt;
-        cout << setw(8) << fixed << setprecision(5) << t << "\t";
+        double wx = vx[0] + vx[1] / 2;
+        double wy = vy[0] + vy[1] / 2;
+        x[2]  = h *    wx;
+        y[2]  = h *    wy;
+        vx[2] = h * fx(wx, wy);
+        vy[2] = h * fy(wx, wy);
 
-        // ÈÄüÂ∫¶
-        cout << setw(8) << fixed << setprecision(5) << vx << "\t";
-        cout << setw(9) << fixed << setprecision(5) << vy << "\t";
+        wx    = vx[0] + vx[2] / 2;
+        wy    = vy[0] + vy[2] / 2;
+        x[3]  = h *    wx;
+        y[3]  = h *    wy;
+        vx[3] = h * fx(wx, wy);
+        vy[3] = h * fy(wx, wy);
 
-        // ‰ΩçÁΩÆ
-        cout << setw(9) << fixed << setprecision(5) << x << "\t";
-        cout << setw(8) << fixed << setprecision(5) << y << endl;
+        wx    = vx[0] + vx[3];
+        wy    = vy[0] + vy[3];
+        x[4]  = h *    wx;
+        y[4]  = h *    wy;
+        vx[4] = h * fx(wx, wy);
+        vy[4] = h * fy(wx, wy);
 
-        v = sqrt(vx2 * vx2 + vy2 * vy2);
-        vx1 = vx2;
-        vy1 = vy2;
+        x[0]  += ( x[1] +  x[2] * 2 +  x[3] * 2 +  x[4]) / 6;
+        y[0]  += ( y[1] +  y[2] * 2 +  y[3] * 2 +  y[4]) / 6;
+        vx[0] += (vx[1] + vx[2] * 2 + vx[3] * 2 + vx[4]) / 6;
+        vy[0] += (vy[1] + vy[2] * 2 + vy[3] * 2 + vy[4]) / 6;
+
+        cout << setw(8) << fixed << setprecision(5) << vx[0] << "\t";
+        cout << setw(9) << fixed << setprecision(5) << vy[0] << "\t";
+        cout << setw(9) << fixed << setprecision(5) <<  x[0] << "\t";
+        cout << setw(8) << fixed << setprecision(5) <<  y[0] << endl;
     }
     return 0;
+}
+
+// ãÛãCíÔçRÇ…ÇÊÇÈêÖïΩï˚å¸ÇÃå∏ë¨ï™
+double fx(double vx, double vy)
+{
+    return k * sqrt(vx * vx + vy * vy) * vx;
+}
+// èdóÕÇ∆ãÛãCíÔçRÇ…ÇÊÇÈâîíºï˚å¸ÇÃå∏ë¨ï™
+double fy(double vx, double vy)
+{
+    return g + (k * sqrt(vx * vx + vy * vy) * vy);
 }

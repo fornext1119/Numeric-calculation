@@ -5,41 +5,52 @@ using namespace std;
 
 const int N = 4;
 
-// ãƒ”ãƒœãƒƒãƒˆé¸æŠ
+// ƒsƒ{ƒbƒg‘I‘ğ
 void pivoting(double a[N][N], double b[N]);
-// å‰é€²æ¶ˆå»
+// ‘OiÁ‹
 void forward_elimination(double a[N][N], double b[N]);
-// å¾Œé€€ä»£å…¥
+// Œã‘Ş‘ã“ü
 void backward_substitution(double a[N][N], double b[N]);
-// çŠ¶æ…‹ã‚’ç¢ºèª
-void disp_progress(double a[N][N], double b[N]);
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N]);
+// ‚QŸŒ³”z—ñ‚ğ•\¦
+void disp_matrix(double matrix[N][N]);
 
-// ã‚¬ã‚¦ã‚¹ã®æ¶ˆå»æ³•
+// ƒKƒEƒX‚ÌÁ‹–@
 int main()
 {
     double a[N][N] = {{-1,-2,7,-2},{1,-1,-2,6},{9,2,1,1},{2,8,-2,1}}; 
     double b[N]    = {8,17,20,16};
 
-    // ãƒ”ãƒœãƒƒãƒˆé¸æŠ
+    // ƒsƒ{ƒbƒg‘I‘ğ
     pivoting(a,b);
-    cout << "ãƒ”ãƒœãƒƒãƒˆé¸æŠå¾Œ" << endl;
-    disp_progress(a,b);
 
-    // å‰é€²æ¶ˆå»
-    forward_elimination(a,b);
-    cout << "å‰é€²æ¶ˆå»å¾Œ" << endl;
-    disp_progress(a,b);
-
-    // å¾Œé€€ä»£å…¥
-    backward_substitution(a,b);
-    cout << "è§£" << endl;
-    for (int i = 0; i < N; i++)
-        cout << setw(14) << fixed << setprecision(10) << b[i] << "\t";
+    cout << "pivoting" << endl;
+    cout << "A" << endl;
+    disp_matrix(a);
+    cout << "B" << endl;
+    disp_vector(b);
     cout << endl;
+
+    // ‘OiÁ‹
+    forward_elimination(a,b);
+
+    cout << "forward elimination" << endl;
+    cout << "A" << endl;
+    disp_matrix(a);
+    cout << "B" << endl;
+    disp_vector(b);
+    cout << endl;
+
+    // Œã‘Ş‘ã“ü
+    backward_substitution(a,b);
+
+    cout << "X" << endl;
+    disp_vector(b);
    
     return 0;
 }
-// å‰é€²æ¶ˆå»
+// ‘OiÁ‹
 void forward_elimination(double a[N][N], double b[N])
 {
     for (int pivot = 0; pivot < N - 1; pivot++)
@@ -53,7 +64,7 @@ void forward_elimination(double a[N][N], double b[N])
         }
     }
 }
-// å¾Œé€€ä»£å…¥
+// Œã‘Ş‘ã“ü
 void backward_substitution(double a[N][N], double b[N])
 {
     for (int row = N - 1; row >= 0; row--)
@@ -63,25 +74,25 @@ void backward_substitution(double a[N][N], double b[N])
         b[row] /= a[row][row];
     }
 }
-// ãƒ”ãƒœãƒƒãƒˆé¸æŠ
+// ƒsƒ{ƒbƒg‘I‘ğ
 void pivoting(double a[N][N], double b[N])
 {
     for(int pivot = 0; pivot < N; pivot++)
     {
-        // å„åˆ—ã§ ä¸€ç•ªå€¤ãŒå¤§ãã„è¡Œã‚’ æ¢ã™
+        // Še—ñ‚Å ˆê”Ô’l‚ª‘å‚«‚¢s‚ğ ’T‚·
         int     max_row =   pivot;
         double  max_val =   0;
         for (int row = pivot; row < N; row++)
         {
             if (fabs(a[row][pivot]) > max_val)
             {
-                // ä¸€ç•ªå€¤ãŒå¤§ãã„è¡Œ
+                // ˆê”Ô’l‚ª‘å‚«‚¢s
                 max_val =   fabs(a[row][pivot]);
                 max_row =   row;
             }
         }
 
-        // ä¸€ç•ªå€¤ãŒå¤§ãã„è¡Œã¨å…¥ã‚Œæ›¿ãˆ
+        // ˆê”Ô’l‚ª‘å‚«‚¢s‚Æ“ü‚ê‘Ö‚¦
         if (max_row != pivot)
         {
             double tmp;
@@ -97,14 +108,20 @@ void pivoting(double a[N][N], double b[N])
         }
     }
 }
-// çŠ¶æ…‹ã‚’ç¢ºèª
-void disp_progress(double a[N][N], double b[N])
+// ‚PŸŒ³”z—ñ‚ğ•\¦
+void disp_vector(double row[N])
+{
+    for (int i = 0; i < N; i++)
+        cout << setw(14) << fixed << setprecision(10) << row[i] << "\t";
+    cout << endl;
+}
+// ‚QŸŒ³”z—ñ‚ğ•\¦
+void disp_matrix(double matrix[N][N])
 {
     for (int i = 0; i < N; i++) 
     {
         for (int j = 0; j < N; j++) 
-            cout << setw(14) << fixed << setprecision(10) << a[i][j] << "\t";
-        cout     << setw(14) << fixed << setprecision(10) << b[i]    << endl;
+            cout << setw(14) << fixed << setprecision(10) << matrix[i][j] << "\t";
+        cout << endl;
     }
-    cout << endl;
 }

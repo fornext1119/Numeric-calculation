@@ -8,20 +8,22 @@ const int N = 4;
 // ピボット選択
 void pivoting(double a[N][N], double b[N]);
 // 前進消去
-void forward_elimination(double a[N][N], double b[N]);
+void forward_elimination(double a[N][N]);
+// 前進代入
+void forward_substitution(double a[N][N], double b[N], double y[N]);
 // 後退代入
-void backward_substitution(double a[N][N], double b[N]);
+void backward_substitution(double a[N][N], double y[N], double x[N]);
 // １次元配列を表示
 void disp_vector(double row[N]);
 // ２次元配列を表示
 void disp_matrix(double matrix[N][N]);
 
-// ガウス・ジョルダン法
+// LU分解
 int main()
 {
     double a[N][N] = {{-1,-2,7,-2},{1,-1,-2,6},{9,2,1,1},{2,8,-2,1}}; 
     double b[N]    = {8,17,20,16};
-    
+
     // ピボット選択
     pivoting(a,b);
 
@@ -33,44 +35,61 @@ int main()
     cout << endl;
 
     // 前進消去
-    forward_elimination(a,b);
+    forward_elimination(a);
 
-    cout << "forward elimination" << endl;
-    cout << "A" << endl;
+    cout << "LU" << endl;
     disp_matrix(a);
-    cout << "B" << endl;
-    disp_vector(b);
-    cout << endl;
 
-    // 後退代入
-    backward_substitution(a,b);
+    // Ly=b から y を求める (前進代入)
+    double y[N] = {0,0,0,0};
+    forward_substitution(a, b, y);
 
+    cout << "Y" << endl;
+    disp_vector(y);
+
+    // Ux=y から x を求める (後退代入)
+    double x[N] = {0,0,0,0};
+    backward_substitution(a, y, x);
+    
     cout << "X" << endl;
-    disp_vector(b);
-   
+    disp_vector(x);
+
     return 0;
 }
 // 前進消去
-void forward_elimination(double a[N][N], double b[N])
+void forward_elimination(double a[N][N])
 {
-    for (int pivot = 0; pivot < N; pivot++)
+    for (int pivot = 0; pivot < N - 1; pivot++)
     {
-        for (int row = 0; row < N; row++)
+        for (int row = pivot + 1; row < N; row++)
         {
-            if (row == pivot) continue;
-
-            double  s   = a[row][pivot] / a[pivot][pivot];
+            double s = a[row][pivot] / a[pivot][pivot];
             for (int col = pivot; col < N; col++)
-                a[row][col] -= a[pivot][col]    * s;
-            b[row]          -= b[pivot]         * s;
+                a[row][col] -= a[pivot][col] * s; // これが 上三角行列
+            a[row][pivot] = s;                    // これが 下三角行列
+            // b[row]    -= b[pivot] * s;         // この値は変更しない
         }
     }
 }
-// 後退代入
-void backward_substitution(double a[N][N], double b[N])
+// 前進代入
+void forward_substitution(double a[N][N], double b[N], double y[N])
 {
-    for (int pivot = 0; pivot < N; pivot++)
-        b[pivot]  /= a[pivot][pivot];
+    for (int row = 0; row < N; row++)
+    {
+        for (int col = 0; col < row; col++)
+            b[row] -= a[row][col] * y[col];
+        y[row] = b[row];
+    }
+}
+// 後退代入
+void backward_substitution(double a[N][N], double y[N], double x[N])
+{
+    for (int row = N - 1; row >= 0; row--)
+    {
+        for (int col = N - 1; col > row; col--)
+            y[row] -= a[row][col] * x[col];
+        x[row] = y[row] / a[row][row];
+    }
 }
 // ピボット選択
 void pivoting(double a[N][N], double b[N])

@@ -1,18 +1,20 @@
-with TEXT_IO, Ada.Long_Float_Text_IO, Ada.Numerics.Long_Elementary_Functions;
-use  TEXT_IO, Ada.Long_Float_Text_IO, Ada.Numerics.Long_Elementary_Functions;
+with TEXT_IO, Ada.Integer_Text_IO, Ada.Long_Float_Text_IO, Ada.Numerics.Long_Elementary_Functions;
+use  TEXT_IO, Ada.Integer_Text_IO, Ada.Long_Float_Text_IO, Ada.Numerics.Long_Elementary_Functions;
 
-procedure Ada1005 is
+procedure Ada1102 is
 
     N : Constant Integer := 3;
 
     type Long_Float_Array       is array (0..N)       of Long_Float;
     type Long_Float_TwoDimArray is array (0..N, 0..N) of Long_Float;
 
-    a:Long_Float_TwoDimArray := ((-1.0, -2.0, 7.0, -2.0), (1.0, -1.0, -2.0, 6.0), ( 9.0,  2.0, 1.0,  1.0), (2.0, 8.0, -2.0, 1.0));
-    b:Long_Float_Array := (8.0, 17.0, 20.0, 16.0);
-    y:Long_Float_Array := (0.0, 0.0, 0.0, 0.0);
-    x:Long_Float_Array := (0.0, 0.0, 0.0, 0.0);
+    a:Long_Float_TwoDimArray := ((5.0, 4.0, 1.0, 1.0)
+                                ,(4.0, 5.0, 1.0, 1.0)
+                                ,(1.0, 1.0, 4.0, 2.0)
+                                ,(1.0, 1.0, 2.0, 4.0));
 
+    x:Long_Float_Array := (1.0, 0.0, 0.0, 0.0);
+        
     -- １次元配列を表示
     procedure disp_vector(row:Long_Float_Array) is
     begin
@@ -23,20 +25,23 @@ procedure Ada1005 is
         New_Line;
     end disp_vector;
 
-    -- ２次元配列を表示
-    procedure disp_matrix(matrix:Long_Float_TwoDimArray) is
+    -- 正規化 (ベクトルの長さを１にする)
+    procedure normarize(x:in out Long_Float_Array) is
+        s:Long_Float;
     begin
-        for i in matrix'Range loop
-            for j in matrix'Range loop
-                Put(matrix(i,j), Fore=>3, Aft=>10, Exp=>0);
-                Put(Ascii.HT);
-            end loop;
-            New_Line;
+        s := 0.0;
+        for i in x'Range loop
+            s := s + x(i) * x(i);        
         end loop;
-    end disp_matrix;
+        s := Sqrt(s);
+            
+        for i in x'Range loop
+            x(i) := x(i) / s;        
+        end loop;
+        end normarize;
 
-    -- 前進消去
-    procedure forward_elimination(a:in out Long_Float_TwoDimArray; b:in out Long_Float_Array) is
+    -- LU分解
+    procedure forward_elimination(a:in out Long_Float_TwoDimArray) is
         s:Long_Float;
     begin
         for pivot in a'First..(a'Last - 1) loop
@@ -46,13 +51,12 @@ procedure Ada1005 is
                     a(row,col) := a(row,col) - a(pivot,col) * s; -- これが 上三角行列
                 end loop;
                 a(row,pivot)   := s;                             -- これが 下三角行列
-                -- b(row)      := b(row)     - b(pivot)     * s; -- この値は変更しない
             end loop;
         end loop;
     end forward_elimination;
 
-    -- 前進代入
-    procedure forward_substitution(a:Long_Float_TwoDimArray; b:in out Long_Float_Array; y:in out Long_Float_Array) is
+    -- 前進代入 (Ly = b から y を求める)
+    procedure forward_substitution(a:Long_Float_TwoDimArray; y:in out Long_Float_Array; b:in out Long_Float_Array) is
     begin
         for row in a'Range loop
             for col in a'First..row loop
@@ -62,8 +66,8 @@ procedure Ada1005 is
         end loop;
     end forward_substitution;
 
-    -- 後退代入
-    procedure backward_substitution(a:Long_Float_TwoDimArray; y:in out Long_Float_Array; x:in out Long_Float_Array) is
+    -- 後退代入 (Ux = y から x を求める)
+    procedure backward_substitution(a:Long_Float_TwoDimArray; x:in out Long_Float_Array; y:in out Long_Float_Array) is
     begin
         for row in reverse a'Range loop
             for col in reverse (row + 1)..a'Last loop
@@ -72,65 +76,82 @@ procedure Ada1005 is
             x(row) := y(row) / a(row,row);
         end loop;
     end backward_substitution;
-
-    -- ピボット選択
-    procedure pivoting(a:in out Long_Float_TwoDimArray; b:in out Long_Float_Array) is
-        max_val, tmp:Long_Float;
-        max_row:Integer;
+    
+    -- 逆ベキ乗法
+    procedure inverse(a:Long_Float_TwoDimArray; x0:in out Long_Float_Array; lambda:out Long_Float) is
+        p0, p1, e0, e1:Long_Float;
+        b:Long_Float_Array  := (0.0, 0.0, 0.0, 0.0);
+        y:Long_Float_Array  := (0.0, 0.0, 0.0, 0.0);
+        x1:Long_Float_Array := (0.0, 0.0, 0.0, 0.0);
     begin
-        for pivot in a'Range loop
-            -- 各列で 一番値が大きい行を 探す
-            max_row :=   pivot;
-            max_val :=   0.0;
-            for row in  pivot..a'Last loop
-                if Abs(a(row,pivot)) > max_val then
-                    -- 一番値が大きい行
-                    max_val :=   Abs(a(row,pivot));
-                    max_row :=   row;
-                end if;
-            end loop;
-
-            -- 一番値が大きい行と入れ替え
-            if max_row /= pivot then
-                tmp := 0.0;
-                for col in a'Range loop
-                    tmp            :=   a(max_row,col);
-                    a(max_row,col) :=   a(pivot,col);
-                    a(pivot,col)   :=   tmp;
-                end loop;
-                tmp        :=   b(max_row);
-                b(max_row) :=   b(pivot);
-                b(pivot)   :=   tmp;
-            end if;
+        -- 正規化 (ベクトル x0 の長さを１にする)
+        normarize(x0);
+        e0 := 0.0;
+        for i in x0'Range loop
+            e0 := e0 + x0(i);
         end loop;
-    end pivoting;
+        
+        for k in 1..100 loop
+            -- １次元配列を表示
+            Put(k, Width=> 3);
+            Put(Ascii.HT);
+            disp_vector(x0);
 
+            -- Ly = b から y を求める (前進代入)
+            for i in x0'Range loop
+                b(i) := x0(i);
+                y(i) := 0.0;
+            end loop;
+            forward_substitution(a,y,b);
+
+            -- Ux = y から x を求める (後退代入)
+            for i in x1'Range loop
+                x1(i) := 0.0;
+            end loop;
+            backward_substitution(a,x1,y);
+
+            -- 内積
+            p0 := 0.0;
+            p1 := 0.0;
+            for i in x0'Range loop
+                p0 := p0 + x1(i) * x1(i);
+                p1 := p1 + x1(i) * x0(i);
+            end loop;
+            -- 固有値
+            lambda := p1 / p0;
+
+            -- 正規化 (ベクトル x1 の長さを１にする)
+            normarize(x1);
+            -- 収束判定
+            e1 := 0.0;
+            for i in x0'Range loop
+                e1 := e1 + x1(i);
+            end loop;
+            if Abs(e1 - e0) < 0.00000000001 then
+                exit;
+            end if;
+            
+            for i in x0'Range loop
+                x0(i) := x1(i);
+            end loop;
+            e0 := e1;
+        end loop;
+    end inverse;
+
+-- 逆ベキ乗法で最小固有値を求める
+    lambda:Long_Float := 0.0;
 begin
-    -- ピボット選択
-    pivoting(a,b);
-
-    Put_Line("pivoting");
-    Put_Line("A");
-    disp_matrix(a);
-    Put_Line("B");
-    disp_vector(b);
+    -- LU分解
+    forward_elimination(a);
+    
+    -- 逆ベキ乗法
+    inverse(a, x, lambda);
+    
     Put_Line("");
+    Put_Line("eigenvalue");    
+    Put(lambda, Fore=>3, Aft=>10, Exp=>0);
+    New_Line;
 
-    -- 前進消去
-    forward_elimination(a,b);
-
-    Put_Line("LU");
-    disp_matrix(a);
-
-    -- Ly=b から y を求める (前進代入)
-    forward_substitution(a,b,y);
-
-    Put_Line("Y");
-    disp_vector(y);
-
-    -- Ux=y から x を求める (後退代入)
-    backward_substitution(a,y,x);
-
-    Put_Line("X");
+    Put_Line("eigenvector");
     disp_vector(x);
-end Ada1005;
+end Ada1102;

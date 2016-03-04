@@ -1,0 +1,148 @@
+program Pas1005(arg);
+{$MODE delphi}
+
+uses
+    SysUtils, Math;
+
+const
+    N = 3;
+
+type
+    TwoDimArray = array [0..N,0..N] of Double;
+
+// １次元配列を表示
+procedure disp_vector(row:array of Double); 
+var
+    i:Integer;
+begin
+    for i := Low(row) to High(row) do
+        write(format('%14.10f'#9, [row[i]]));
+    writeln();
+end;        
+// ２次元配列を表示
+procedure disp_matrix(matrix:TwoDimArray); 
+var
+    i,j:Integer;
+begin
+    for i := Low(matrix) to High(matrix) do
+    begin
+        for j := Low(matrix) to High(matrix) do
+            write(format('%14.10f'#9, [matrix[i,j]]));
+        writeln();
+    end;
+end;        
+// 前進消去
+procedure forward_elimination(var a:TwoDimArray; var b:array of Double); 
+var
+    s:Double;
+    pivot, row, col:Integer;
+begin
+    for pivot := Low(a) to High(a) - 1 do
+    begin
+        for row := (pivot + 1) to High(a) do
+        begin
+            s := a[row,pivot] / a[pivot,pivot];
+            for col := pivot to High(a) do
+                a[row,col] := a[row,col] - a[pivot,col] * s; // これが 上三角行列
+            a[row,pivot]   := s;                             // これが 下三角行列
+            // b[row]      := b[row]     - b[pivot]     * s; // この値は変更しない
+        end;
+    end;
+end;
+// 前進代入
+procedure forward_substitution(a:TwoDimArray; b:array of Double; var y:array of Double); 
+var
+    row, col:Integer;
+begin
+    for row := Low(a) to High(a) do
+    begin
+        for col := Low(a) to row do
+            b[row] := b[row] - a[row,col] * y[col];
+        y[row] := b[row];
+    end;
+end;
+// 後退代入
+procedure backward_substitution(a:TwoDimArray; y:array of Double; var x:array of Double); 
+var
+    row, col:Integer;
+begin
+    for row := High(a) downto Low(a) do
+    begin
+        for col := High(a) downto row + 1 do
+            y[row] := y[row] - a[row,col] * x[col];
+        x[row] := y[row] / a[row,row];
+    end;
+end;
+
+// ピボット選択
+procedure pivoting(var a:TwoDimArray; var b:array of Double);
+var
+    max_val, tmp:Double;
+    pivot, row, col, max_row:Integer;
+begin
+    for pivot := Low(a) to High(a) do
+    begin
+        // 各列で 一番値が大きい行を 探す
+        max_row :=   pivot;
+        max_val :=   0;
+        for row := pivot to High(a) do
+        begin
+            if abs(a[row,pivot]) > max_val then
+            begin
+                // 一番値が大きい行
+                max_val :=   abs(a[row,pivot]);
+                max_row :=   row;
+            end;
+        end;
+
+        // 一番値が大きい行と入れ替え
+        if max_row <> pivot then
+        begin
+            tmp := 0;
+            for col := Low(a) to High(a) do
+            begin
+                tmp            :=   a[max_row,col];
+                a[max_row,col] :=   a[pivot,col];
+                a[pivot,col]   :=   tmp;
+            end;
+            tmp        :=   b[max_row];
+            b[max_row] :=   b[pivot];
+            b[pivot]   :=   tmp;
+        end;
+    end;
+end;
+
+var
+    a :TwoDimArray = ((-1.0, -2.0, 7.0, -2.0), (1.0, -1.0, -2.0, 6.0), ( 9.0,  2.0, 1.0,  1.0), (2.0, 8.0, -2.0, 1.0));
+    b :array [0..N] of Double = (8.0, 17.0, 20.0, 16.0);
+    x :array [0..N] of Double = (0.0, 0.0, 0.0, 0.0);
+    y :array [0..N] of Double = (0.0, 0.0, 0.0, 0.0);
+begin
+    // ピボット選択
+    pivoting(a,b);
+
+    writeln('pivoting');
+    writeln('A');
+    disp_matrix(a);
+    writeln('B');
+    disp_vector(b);
+    writeln();
+
+    // 前進消去
+    forward_elimination(a,b);
+
+    writeln('LU');
+    disp_matrix(a);
+
+    // Ly=b から y を求める (前進代入)
+    forward_substitution(a,b,y);
+
+    writeln('Y');
+    disp_vector(y);
+
+    // Ux=y から x を求める (後退代入)
+    backward_substitution(a,y,x);
+
+    writeln('X');
+    disp_vector(x);
+end.

@@ -6,7 +6,7 @@ void main(string[] args)
     const double a = 0;
     const double b = 1;
 
-    // ‘äŒ`‘¥‚ÅÏ•ª
+    // å°å½¢å‰‡ã§ç©åˆ†
     int n = 2;
     for (int j = 1; j <= 10; j++)
     {
@@ -21,7 +21,7 @@ void main(string[] args)
         s = h * ((f(a) + f(b)) / 2 + s);
         n *= 2;
 
-        // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+        // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
         writefln("%2d : %13.10f, %13.10f", j, s, s - PI);
     }
 }

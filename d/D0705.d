@@ -1,7 +1,7 @@
 import std.stdio;
 import std.math;
 
-// ƒf[ƒ^“_‚Ì”
+// ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•°
 const int N = 7; 
 
 void main(string[] args)
@@ -9,7 +9,7 @@ void main(string[] args)
 	double x[N];
 	double y[N];
 
-    // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+    // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
     for (int i = 0; i < N; i++)
     {
         double d = i * 1.5 - 4.5;
@@ -17,7 +17,7 @@ void main(string[] args)
         y[i]  = f(d);
     }
 
-    // ‚R€•û’ö®‚ÌŒW”‚Ì•\‚ğì‚é
+    // ï¼“é …æ–¹ç¨‹å¼ã®ä¿‚æ•°ã®è¡¨ã‚’ä½œã‚‹
     double a[N];
     double b[N];
     double c[N];
@@ -29,7 +29,7 @@ void main(string[] args)
         c[i] =         x[i+1] - x[i]; 
         d[i] = 6.0 * ((y[i+1] - y[i]) / (x[i+1] - x[i]) - (y[i] - y[i-1]) / (x[i] - x[i-1]));
     }
-    // ‚R€•û’ö®‚ğ‰ğ‚­ (ƒg|ƒ}ƒX–@)
+    // ï¼“é …æ–¹ç¨‹å¼ã‚’è§£ã (ãƒˆï¼ãƒã‚¹æ³•)
     double g[N];
     double s[N];
     g[1] = b[1];
@@ -48,28 +48,28 @@ void main(string[] args)
         z[i] = (s[i] - c[i] * z[i+1]) / g[i];
     }
 
-    // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ
+    // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“
     for (int i = 0; i <= 18; i++)
     {
         double d1 = i * 0.5 - 4.5;
         double d2 = f(d1);
         double d3 = spline(d1, x, y, z);
 
-        // Œ³‚ÌŠÖ”‚Æ”äŠr
+        // å…ƒã®é–¢æ•°ã¨æ¯”è¼ƒ
         writefln("%5.2f\t%8.5f\t%8.5f\t%8.5f", d1, d2, d3, d2 - d3);
     }
 }
 
-// Œ³‚ÌŠÖ”
+// å…ƒã®é–¢æ•°
 double f(double x)
 {
     return x - pow(x,3) / (3 * 2) + pow(x,5) / (5 * 4 * 3 * 2);
 }
 
-// Spline (ƒXƒvƒ‰ƒCƒ“) •âŠÔ
+// Spline (ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³) è£œé–“
 double spline(double d, double x[], double y[], double z[])
 {
-    // •âŠÔŠÖ”’l‚ª‚Ç‚Ì‹æŠÔ‚É‚ ‚é‚©
+    // è£œé–“é–¢æ•°å€¤ãŒã©ã®åŒºé–“ã«ã‚ã‚‹ã‹
     int k = -1;
     for (int i = 1; i < N; i++)
     {

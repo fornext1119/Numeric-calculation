@@ -1,7 +1,7 @@
 import std.stdio;
 import std.math;
 
-// ƒf[ƒ^“_‚Ì”
+// ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•°
 const int N = 7; 
 
 void main(string[] args)
@@ -9,7 +9,7 @@ void main(string[] args)
 	double x[N];
 	double y[N];
 
-    // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+    // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
     for (int i = 0; i < N; i++)
     {
         double d = i * 1.5 - 4.5;
@@ -17,25 +17,25 @@ void main(string[] args)
         y[i] = f(d);
     }
 
-    // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ
+    // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“
     for (int i = 0; i <= 18; i++)
     {
         double d  = i * 0.5 - 4.5;
         double d1 = f(d);
         double d2 = lagrange(d, x, y);
 
-        // Œ³‚ÌŠÖ”‚Æ”äŠr
+        // å…ƒã®é–¢æ•°ã¨æ¯”è¼ƒ
         writefln("%5.2f\t%8.5f\t%8.5f\t%8.5f", d, d1, d2, d1 - d2);
     }
 }
 
-// Œ³‚ÌŠÖ”
+// å…ƒã®é–¢æ•°
 double f(double x)
 {
     return x - pow(x,3) / (3 * 2) + pow(x,5) / (5 * 4 * 3 * 2);
 }
 
-// Lagrange (ƒ‰ƒOƒ‰ƒ“ƒWƒ…) •âŠÔ
+// Lagrange (ãƒ©ã‚°ãƒ©ãƒ³ã‚¸ãƒ¥) è£œé–“
 double lagrange(double d, double x[], double y[])
 {
     double sum = 0;

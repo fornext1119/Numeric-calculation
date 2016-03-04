@@ -8,7 +8,7 @@ void main(string[] args)
 
     double t[7][7];
 
-    // ‘äŒ`‘¥‚ÅÏ•ª
+    // å°å½¢å‰‡ã§ç©åˆ†
     int n = 2;
     for (int i = 1; i <= 6; i++)
     {
@@ -20,12 +20,12 @@ void main(string[] args)
             x += h;
             s += f(x);
         }
-        // Œ‹‰Ê‚ğ•Û‘¶
+        // çµæœã‚’ä¿å­˜
         t[i][1] = h * ((f(a) + f(b)) / 2 + s);
         n *= 2;
     }
 
-    // Richardson‚Ì•âŠO–@
+    // Richardsonã®è£œå¤–æ³•
     n = 4;
     for (int j = 2; j <= 6; j++)
     {
@@ -34,7 +34,7 @@ void main(string[] args)
             t[i][j] = t[i][j - 1] + (t[i][j - 1] - t[i - 1][j - 1]) / (n - 1);
             if (i == j)
             {
-                // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+                // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
                 writefln("%2d : %13.10f, %13.10f", j, t[i][j], t[i][j] - PI);
             }
         }

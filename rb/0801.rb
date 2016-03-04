@@ -1,0 +1,54 @@
+# èdóÕâ¡ë¨ìx
+$g = -9.8
+# ãÛãCíÔçRåWêî
+$k = -0.01
+# éûä‘ä‘äu(ïb)
+h = 0.01
+
+# äpìx
+degree = 45
+radian = degree * Math::PI / 180.0
+# èâë¨ 250 km/h -> ïbë¨Ç…ïœä∑
+v = 250 * 1000 / 3600
+# êÖïΩï˚å¸ÇÃë¨ìx
+vx = Array.new(2)
+vx[0] = v * Math.cos(radian)
+# âîíºï˚å¸ÇÃë¨ìx
+vy = Array.new(2)
+vy[0] = v * Math.sin(radian)
+# åoâﬂïbêî
+t = 0.0
+# à íu
+x = 0.0
+y = 0.0
+
+# ãÛãCíÔçRÇ…ÇÊÇÈêÖïΩï˚å¸ÇÃå∏ë¨ï™
+def fx(vx, vy)
+    return $k * Math.sqrt(vx * vx + vy * vy) * vx
+end
+
+# èdóÕÇ∆ãÛãCíÔçRÇ…ÇÊÇÈâîíºï˚å¸ÇÃå∏ë¨ï™
+def fy(vx, vy)
+    return $g + ($k * Math.sqrt(vx * vx + vy * vy) * vy)
+end
+
+# Eulerñ@
+i = 1
+while y >= 0.0 do
+    # åoâﬂïbêî
+    t = i * h
+
+    # à íu
+    x += h * vx[0]
+    y += h * vy[0]
+
+    printf("%4.2f\t%8.5f\t%9.5f\t%9.5f\t%8.5f\n", t, vx[0], vy[0], x, y)
+
+    # ë¨ìx
+    vx[1] = vx[0] + h * fx(vx[0], vy[0])
+    vy[1] = vy[0] + h * fy(vx[0], vy[0])
+    vx[0] = vx[1]
+    vy[0] = vy[1]
+
+    i += 1
+end

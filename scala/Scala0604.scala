@@ -5,7 +5,7 @@ object Scala0604 {
 
 		val t = Array.ofDim[Double](7, 7)
 
-		// ‘äŒ`‘¥‚ÅÏ•ª
+		// å°å½¢å‰‡ã§ç©åˆ†
 		var n:Int = 2
 		for (i <- 1 to 6) {
 		    var h:Double = (b - a) / n  
@@ -15,18 +15,18 @@ object Scala0604 {
 		        x += h
 		        s += f(x)
 		    }
-		    // Œ‹‰Ê‚ğ•Û‘¶
+		    // çµæœã‚’ä¿å­˜
 		    t(i)(1) = h * ((f(a) + f(b)) / 2 + s)
 		    n *= 2
 		}
 
-		// Richardson‚Ì•âŠO–@
+		// Richardsonã®è£œå¤–æ³•
 		n = 4
 		for (j <- 2 to 6) {
 		    for (i <- j to 6) {
 		        t(i)(j) = t(i)(j - 1) + (t(i)(j - 1) - t(i - 1)(j - 1)) / (n - 1)
 		        if (i == j) {
-		            // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+		            // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
 		            println("%3d : %13.10f, %13.10f".format(j, t(i)(j), t(i)(j) - Math.PI))
 		        }
 		    }

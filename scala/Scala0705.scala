@@ -1,13 +1,13 @@
 object Scala0705 {
-    // ƒf[ƒ^“_‚Ì” - 1
+    // ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•° - 1
     val N = 6 
 
     def main(args: Array[String]) {
-        // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+        // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
         val x = (0 to N).map(_ * 1.5 - 4.5)
         val y = x.map(f)
 
-		// ‚R€•û’ö®‚ÌŒW”‚Ì•\‚ğì‚é
+		// ï¼“é …æ–¹ç¨‹å¼ã®ä¿‚æ•°ã®è¡¨ã‚’ä½œã‚‹
 		val a = Array.ofDim[Double](N)
 		val b = Array.ofDim[Double](N)
 		val c = Array.ofDim[Double](N)
@@ -18,7 +18,7 @@ object Scala0705 {
 	        c(i) =         x(i+1) - x(i) 
 	        d(i) = 6.0 * ((y(i+1) - y(i)) / (x(i+1) - x(i)) - (y(i) - y(i-1)) / (x(i) - x(i-1)))
 	    }
-		// ‚R€•û’ö®‚ğ‰ğ‚­ (ƒg|ƒ}ƒX–@)
+		// ï¼“é …æ–¹ç¨‹å¼ã‚’è§£ã (ãƒˆï¼ãƒã‚¹æ³•)
 		val g = Array.ofDim[Double](N)
 		val s = Array.ofDim[Double](N)
 	    g(1) = b(1)
@@ -34,7 +34,7 @@ object Scala0705 {
 	    for (i <- N - 2 to 1 by -1)
 	        z(i) = (s(i) - c(i) * z(i+1)) / g(i)
 
-        // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ
+        // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“
         val d1 = (0 to 18).map(_ * 0.5 - 4.5)
         val d2 = d1.map(f)
         val d3 = d1.map(spline(_, x, y, z))
@@ -45,14 +45,14 @@ object Scala0705 {
         }
     }
 
-    // Œ³‚ÌŠÖ”
+    // å…ƒã®é–¢æ•°
     def f(x:Double) = {
         x - Math.pow(x,3) / (3 * 2) + Math.pow(x,5) / (5 * 4 * 3 * 2)
     }
 
-	// Spline (ƒXƒvƒ‰ƒCƒ“) •âŠÔ
+	// Spline (ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³) è£œé–“
     def spline(d:Double, x:IndexedSeq[Double], y:IndexedSeq[Double], z:IndexedSeq[Double]) = {
-	    // •âŠÔŠÖ”’l‚ª‚Ç‚Ì‹æŠÔ‚É‚ ‚é‚©
+	    // è£œé–“é–¢æ•°å€¤ãŒã©ã®åŒºé–“ã«ã‚ã‚‹ã‹
 	    var k = -1
 	    for (i <- N to 1 by -1) {
 	        if (d <= x(i)) k = i - 1

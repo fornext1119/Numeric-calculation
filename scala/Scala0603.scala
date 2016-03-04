@@ -3,7 +3,7 @@ object Scala0603 {
 		val a:Double = 0
 		val b:Double = 1
 
-		// Simpson‘¥‚ÅÏ•ª
+		// Simpsonå‰‡ã§ç©åˆ†
 		var n:Int = 2
 		for (j <- 1 to 5) {
 		    var h:Double  = (b - a) / n  
@@ -21,7 +21,7 @@ object Scala0603 {
 		    var s:Double = (s2 + s4) * h / 3
 		    n *= 2
 
-		    // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+		    // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
 		    println("%3d : %13.10f, %13.10f".format(j, s, s - Math.PI))
 		}
     }

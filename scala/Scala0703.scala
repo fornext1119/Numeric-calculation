@@ -1,13 +1,13 @@
 object Scala0703 {
-    // ƒf[ƒ^“_‚Ì” - 1
+    // ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•° - 1
     val N = 6 
 
     def main(args: Array[String]) {
-        // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+        // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
         val x = (0 to N).map(_ * 1.5 - 4.5)
         val y = x.map(f)
 
-	    // ·•ª¤‚Ì•\‚ğì‚é
+	    // å·®åˆ†å•†ã®è¡¨ã‚’ä½œã‚‹
         val d = Array.ofDim[Double](N + 1, N + 1)
 	    for (j <- 0 to N)
 	        d(0)(j) = y(j)
@@ -17,10 +17,10 @@ object Scala0703 {
 	            d(i)(j) = (d(i-1)(j+1) - d(i-1)(j)) / (x(j+i) - x(j))
 	    }
 
-	    // ‚ŠK·•ª¤
+	    // ï½éšå·®åˆ†å•†
         val a = (0 to N).map(d(_)(0))
 
-        // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ
+        // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“
         val d1 = (0 to 18).map(_ * 0.5 - 4.5)
         val d2 = d1.map(f)
         val d3 = d1.map(newton(_, x, a))
@@ -31,12 +31,12 @@ object Scala0703 {
         }
     }
 
-    // Œ³‚ÌŠÖ”
+    // å…ƒã®é–¢æ•°
     def f(x:Double) = {
         x - Math.pow(x,3) / (3 * 2) + Math.pow(x,5) / (5 * 4 * 3 * 2)
     }
 
-	// Newton (ƒjƒ…[ƒgƒ“) •âŠÔ
+	// Newton (ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ³) è£œé–“
     def newton(d:Double, x:IndexedSeq[Double], a:IndexedSeq[Double]) = {
         var sum_list = List(a(0))
         for (i <- 1 to N) {

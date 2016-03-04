@@ -3,37 +3,37 @@ package main
 import "fmt"
 import "math"
 
-// ƒf[ƒ^“_‚Ì”
+// ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•°
 const N = 7 
 
 func main() {
     var x [N]float64
     var y [N]float64
 
-    // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+    // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
     for i := 0; i < N; i++ {
         var d float64 = float64(i) * 1.5 - 4.5
         x[i] = d
         y[i] = f(d)
     }
 
-    // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ 
+    // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“ 
     for i := 0; i <= 18; i++ {
         var d  float64 = float64(i) * 0.5 - 4.5
         var d1 float64 = f(d)
         var d2 float64 = neville(d, x[:], y[:])
 
-        // Œ³‚ÌŠÖ”‚Æ”äŠr
+        // å…ƒã®é–¢æ•°ã¨æ¯”è¼ƒ
         fmt.Printf("%5.2f\t%8.5f\t%8.5f\t%8.5f\n", d, d1, d2, d1 - d2)
     }
 }
 
-// Œ³‚ÌŠÖ”
+// å…ƒã®é–¢æ•°
 func f(x float64) float64 {
     return x - math.Pow(x,3) / (3 * 2) + math.Pow(x,5) / (5 * 4 * 3 * 2)
 }
 
-// Neville (ƒlƒ”ƒBƒ‹) •âŠÔ
+// Neville (ãƒãƒ´ã‚£ãƒ«) è£œé–“
 func neville(d float64, x []float64, y []float64) float64 {
     var w[N][N] float64
     for i := 0; i < N; i++ {

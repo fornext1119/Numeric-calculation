@@ -9,7 +9,7 @@ func main() {
 
     var t[7][7] float64
 
-    // ‘äŒ`‘¥‚ÅÏ•ª
+    // å°å½¢å‰‡ã§ç©åˆ†
     var n int = 2
     for i := 1; i <= 6; i++ {
         var h float64 = (b - a) / float64(n) 
@@ -19,18 +19,18 @@ func main() {
             x += h
             s += f(x)
         }
-        // Œ‹‰Ê‚ğ•Û‘¶
+        // çµæœã‚’ä¿å­˜
         t[i][1] = h * ((f(a) + f(b)) / 2 + s)
         n *= 2
     }
 
-    // Richardson‚Ì•âŠO–@
+    // Richardsonã®è£œå¤–æ³•
     n = 4
     for j := 2; j <= 6; j++ {
         for i := j; i <= 6; i++ {
             t[i][j] = t[i][j - 1] + (t[i][j - 1] - t[i - 1][j - 1]) / float64(n - 1)
             if i == j {
-                // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+                // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
                 fmt.Printf("%2d : %13.10f, %13.10f\n", j, t[i][j], t[i][j] - math.Pi)
             }
         }

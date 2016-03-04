@@ -3,21 +3,21 @@ package main
 import "fmt"
 import "math"
 
-// ƒf[ƒ^“_‚Ì”
+// ãƒ‡ãƒ¼ã‚¿ç‚¹ã®æ•°
 const N = 7
 
 func main() {
     var x [N]float64
     var y [N]float64
 
-    // 1.5‚İ‚Å -4.5`4.5 ‚Ü‚Å, ‚V“_‚¾‚¯’l‚ğƒZƒbƒg
+    // 1.5åˆ»ã¿ã§ -4.5ï½4.5 ã¾ã§, ï¼—ç‚¹ã ã‘å€¤ã‚’ã‚»ãƒƒãƒˆ
     for i := 0; i < N; i++ {
         var d float64 = float64(i) * 1.5 - 4.5
         x[i]  = d
         y[i]  = f(d)
     }
 
-    // ‚R€•û’ö®‚ÌŒW”‚Ì•\‚ğì‚é
+    // ï¼“é …æ–¹ç¨‹å¼ã®ä¿‚æ•°ã®è¡¨ã‚’ä½œã‚‹
     var a [N]float64
     var b [N]float64
     var c [N]float64
@@ -29,7 +29,7 @@ func main() {
         d[i] = 6.0 * ((y[i+1] - y[i]) / (x[i+1] - x[i]) - (y[i] - y[i-1]) / (x[i] - x[i-1]))
     }
 
-    // ‚R€•û’ö®‚ğ‰ğ‚­ (ƒg|ƒ}ƒX–@)
+    // ï¼“é …æ–¹ç¨‹å¼ã‚’è§£ã (ãƒˆï¼ãƒã‚¹æ³•)
     var g [N]float64
     var s [N]float64
     g[1] = b[1]
@@ -46,25 +46,25 @@ func main() {
         z[i] = (s[i] - c[i] * z[i+1]) / g[i]
     }
 
-    // 0.5‚İ‚Å —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢’l‚ğ•âŠÔ 
+    // 0.5åˆ»ã¿ã§ ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„å€¤ã‚’è£œé–“ 
     for i := 0; i <= 18; i++ {
         var d1 float64 = float64(i) * 0.5 - 4.5
         var d2 float64 = f(d1)
         var d3 float64 = spline(d1, x[:], y[:], z[:])
 
-        // Œ³‚ÌŠÖ”‚Æ”äŠr
+        // å…ƒã®é–¢æ•°ã¨æ¯”è¼ƒ
         fmt.Printf("%5.2f\t%8.5f\t%8.5f\t%8.5f\n", d1, d2, d3, d2 - d3)
     }
 }
 
-// Œ³‚ÌŠÖ”
+// å…ƒã®é–¢æ•°
 func f(x float64) float64 {
     return x - math.Pow(x,3) / (3 * 2) + math.Pow(x,5) / (5 * 4 * 3 * 2)
 }
 
-// Spline (ƒXƒvƒ‰ƒCƒ“) •âŠÔ
+// Spline (ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³) è£œé–“
 func spline(d float64, x []float64, y []float64, z []float64) float64 {
-    // •âŠÔŠÖ”’l‚ª‚Ç‚Ì‹æŠÔ‚É‚ ‚é‚©
+    // è£œé–“é–¢æ•°å€¤ãŒã©ã®åŒºé–“ã«ã‚ã‚‹ã‹
     k := -1
     for i := 1; i < N; i++ {
         if d <= x[i] {

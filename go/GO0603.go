@@ -7,7 +7,7 @@ func main() {
     const a = 0
     const b = 1
 
-    // Simpson‘¥‚ÅÏ•ª
+    // Simpsonå‰‡ã§ç©åˆ†
     var n int = 2
     for j := 1; j <= 5; j++ {
         var h  float64 = (b - a) / float64(n) 
@@ -25,7 +25,7 @@ func main() {
         var s float64 = (s2 + s4) * h / 3
         n *= 2
 
-        // Œ‹‰Ê‚ğ ƒÎ ‚Æ”äŠr
+        // çµæœã‚’ Ï€ ã¨æ¯”è¼ƒ
         fmt.Printf("%2d : %13.10f, %13.10f\n", j, s, s - math.Pi)
     }
 }

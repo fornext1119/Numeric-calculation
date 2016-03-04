@@ -1,0 +1,32 @@
+Option Explicit
+
+Dim a: a = 1.0
+Dim b: b = 2.0
+WScript.StdOut.Write Right(Space(12) & FormatNumber(falseposition(a, b), 10, -1, 0, 0), 12) & vbNewLine
+
+Private Function falseposition(ByVal a, ByVal b)
+    Dim c
+	Do While(True)
+	    'ì_ (a,f(a)) Ç∆ ì_ (b,f(b)) ÇåãÇ‘íºê¸Ç∆ xé≤ÇÃåì_
+	    c = (a * f(b) - b * f(a)) / (f(b) - f(a))
+	    WScript.StdOut.Write Right(Space(12) & FormatNumber(c,          10, -1, 0, 0), 12) & vbTab
+	    WScript.StdOut.Write Right(Space(12) & FormatNumber(c - Sqr(2), 10, -1, 0, 0), 12) & vbNewLine
+
+	    Dim fc: fc = f(c)
+	    If Abs(fc) < 0.0000000001 Then Exit Do
+
+	    If fc < 0 Then
+	        'f(c) < 0 Ç≈Ç†ÇÍÇŒ, âÇÕãÊä‘ (c, b) ÇÃíÜÇ…ë∂ç›
+	        a = c
+	    Else
+	        'f(c) > 0 Ç≈Ç†ÇÍÇŒ, âÇÕãÊä‘ (a, c) ÇÃíÜÇ…ë∂ç›
+	        b = c
+	    End If
+	Loop
+
+    falseposition = c
+End Function
+
+Private Function f(ByVal x)
+    f = x * x - 2.0
+End Function
